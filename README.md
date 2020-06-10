@@ -1,3 +1,6 @@
+*Tutorial* __https://www.youtube.com/watch?v=XlvsJLer_No&list=PLZlA0Gpn_vH8jbFkBjOuFjhxANC63OmXM&index=1__
+
+
 # Heroku setup 
 
  1. Create new app
