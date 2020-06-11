@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 
 const indexRouter = require('./routes/index');
 const authorRoute = require('./routes/authors');
+const bookRoute = require('./routes/books');
 
 
 // CHECK IF WE DON'T RUN IN PRODUCTION THEN WE WILL PULL ALL VARIABLE FROM .ENV FILE THAT WE MADE
@@ -40,5 +41,6 @@ app.use(bodyParser.json())
 
 app.use('/', indexRouter);
 app.use('/authors', authorRoute);
+app.use('/books', bookRoute);
 
 app.listen(process.env.PORT || 3000, ()=>console.log("server is running successfully"));
