@@ -9,11 +9,11 @@
     <div class="ui two fields">
         <div class="field">
             <label for="publishedAfter">Publish After</label>
-            <input type="text" name="publishedAfter" id="publishedAfter" value="<%= searchOption.publishedAfter %>">
+            <input type="date" name="publishedAfter" id="publishedAfter" value="<%= searchOption.publishedAfter %>">
         </div>
         <div class="field">
             <label for="publishedBefore">Publish Before</label>
-            <input type="text" name="publishedBefore" id="publishedBefore" value="<%= searchOption.publishedBefore %>">
+            <input type="date" name="publishedBefore" id="publishedBefore" value="<%= searchOption.publishedBefore %>">
         </div>
     </div>
     <button class="ui blue button" type="submit">Search</button>
@@ -24,7 +24,7 @@
 <br>
 
 <% if(books){ %>
-<div class="ui medium stackable images">
+<div class="ui small stackable images">
     <% books.forEach(book=>{ %>
         <img src="<%= book.coverImagePath %>" alt="Image" class="ui image">
     <% }) %>

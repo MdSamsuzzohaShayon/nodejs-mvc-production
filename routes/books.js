@@ -22,8 +22,22 @@ const upload = multer({
 
 // ALL Book ROUTES
 router.get("/", async (req, res, next) => {
+  let query = Book.find();
+  if(req.query.title != null && req.query.title != ''){
+    query = query.regex('title', new RegExp(req.query.title, 'i'));
+  }
+  if(req.query.publishedBefore != null && req.query.publishedBefore != ''){
+    // less than or equal to
+    // https://mongoosejs.com/docs/2.7.x/docs/query.html
+    query = query.lte('publishDate', req.query.publishedBefore)
+  }
+  if(req.query.publishedAfter != null && req.query.publishedAfter != ''){
+    // less than or equal to
+    // https://mongoosejs.com/docs/2.7.x/docs/query.html
+    query = query.gte('publishDate', req.query.publishedAfter)
+  }
   try{
-    const books = await Book.find({});
+    const books = await query.exec();
     res.render('books/index', {
       books ,
       searchOption: req.query

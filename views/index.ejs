@@ -1,1 +1,10 @@
-Middle
+<div class="ui blue segment">
+    <h2 class="ui header">Recently Added</h2>
+    <% if(books){ %>
+        <div class="ui small stackable images">
+            <% books.forEach(book=>{ %>
+                <img src="<%= book.coverImagePath %>" alt="Image" class="ui image">
+            <% }) %>
+        </div>
+        <% } %>
+</div>
