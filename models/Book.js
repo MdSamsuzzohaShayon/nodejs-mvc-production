@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema =  mongoose.Schema;
+const path = require('path');
 
 const coverImageBasePath = 'uploads/bookCovers';
 
@@ -36,6 +37,16 @@ const bookSchema = new Schema({
     }
 
 });
+
+
+
+// CREATING A VARTIUL PROPERTY
+// https://mongoosejs.com/docs/tutorials/virtuals.html
+bookSchema.virtual('coverImagePath').get(function (){
+    if(this.coverImageName != null){
+        return path.join('/', coverImageBasePath, this.coverImageName);      /*HERE ROOT DIRECTORY '/' MEANS THE PUBLIC FOLDER */
+    }
+})
 
 
 module.exports = mongoose.model('book', bookSchema);

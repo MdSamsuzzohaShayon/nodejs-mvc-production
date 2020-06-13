@@ -1,28 +1,32 @@
 <br><br>
-<h2 class="ui header">Search Authors</h2>
+<h2 class="ui header">Search Books</h2>
 
-<form action="/authors" class="ui form" method="GET" >
+<form action="/books" class="ui form" method="GET">
     <div class="field">
-        <label for="name">Name</label>
-        <input type="text" name="name" id="name" value="<%= searchOption.name %>">
+        <label for="name">Title</label>
+        <input type="text" name="title" id="name" value="<%= searchOption.title %>">
+    </div>
+    <div class="ui two fields">
+        <div class="field">
+            <label for="publishedAfter">Publish After</label>
+            <input type="text" name="publishedAfter" id="publishedAfter" value="<%= searchOption.publishedAfter %>">
+        </div>
+        <div class="field">
+            <label for="publishedBefore">Publish Before</label>
+            <input type="text" name="publishedBefore" id="publishedBefore" value="<%= searchOption.publishedBefore %>">
+        </div>
     </div>
     <button class="ui blue button" type="submit">Search</button>
 </form>
 
+<br>
+<br>
+<br>
 
-<% if(authors){ %>
-<table class="ui green table">
-    <thead>
-        <th>Author Name</th>
-        <th>Action</th>
-    </thead>
-    <tbody>
-        <% authors.forEach(author=>{ %>
-            <tr>
-                <td><%= author.name %></td>
-                <td>Action</td>
-            </tr>
-        <% }) %>
-    </tbody>
-</table>
+<% if(books){ %>
+<div class="ui medium stackable images">
+    <% books.forEach(book=>{ %>
+        <img src="<%= book.coverImagePath %>" alt="Image" class="ui image">
+    <% }) %>
+</div>
 <% } %>

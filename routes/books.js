@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 const Book = require("../models/Book");
 const Author = require("../models/Author");
 // const { fileLoader } = require("ejs");
@@ -21,7 +22,15 @@ const upload = multer({
 
 // ALL Book ROUTES
 router.get("/", async (req, res, next) => {
-  res.send('all books');
+  try{
+    const books = await Book.find({});
+    res.render('books/index', {
+      books ,
+      searchOption: req.query
+    });
+  }catch{
+    res.redirect('/');
+  }
 });
 
 // NEW BOOK ROUTE
@@ -50,13 +59,21 @@ router.post("/", upload.single('cover'), async (req, res, next) => {
     // res.redirect(`books/${newBook.id}`);
     res.redirect('/books')
   } catch {
+    // IF ALL DATA DOESN'T SAVE SUCCESSFULLY AND GIVE US AN ERROR THAT WE ARE GOING TO SAVE THIS BOOK COVER WILL BE REMOVE 
+    if(book.coverImageName != null){
+      removeBookCover(book.coverImageName);
+    }
     renderNewPage(res, book, true);
     // console.log("error ");
     // res.redirect('books')
   }
 });
 
-
+function removeBookCover(fileName){
+  fs.unlink(path.join(uploadPath, fileName), (err)=>{
+    if(err) console.error(err);
+  });
+}
 
 
 
