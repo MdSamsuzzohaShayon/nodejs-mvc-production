@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Schema =  mongoose.Schema;
-const path = require('path');
+// const path = require('path');
 
-const coverImageBasePath = 'uploads/bookCovers';
+// const coverImageBasePath = 'uploads/bookCovers';
 
 const bookSchema = new Schema({
     title: {
@@ -22,7 +22,15 @@ const bookSchema = new Schema({
         type: Number,
         required: true
     },
-    coverImageName: {
+    // coverImageName: {
+    //     type: String,
+    //     required: true
+    // },
+    coverImage: {
+        type: Buffer,
+        required: true
+    },
+    coverImageType: {
         type: String,
         required: true
     },
@@ -43,11 +51,14 @@ const bookSchema = new Schema({
 // CREATING A VARTIUL PROPERTY
 // https://mongoosejs.com/docs/tutorials/virtuals.html
 bookSchema.virtual('coverImagePath').get(function (){
-    if(this.coverImageName != null){
-        return path.join('/', coverImageBasePath, this.coverImageName);      /*HERE ROOT DIRECTORY '/' MEANS THE PUBLIC FOLDER */
+    // if(this.coverImageName != null){
+    //     return path.join('/', coverImageBasePath, this.coverImageName);      /*HERE ROOT DIRECTORY '/' MEANS THE PUBLIC FOLDER */
+    // }
+    if(this.coverImage != null && this.coverImageType != null){
+        return `data:${this.coverImageType};charset=utf-8;base64,${this.coverImage.toString('base64')}`;
     }
 })
 
 
 module.exports = mongoose.model('book', bookSchema);
-module.exports.coverImageBasePath = coverImageBasePath;
+// module.exports.coverImageBasePath = coverImageBasePath;

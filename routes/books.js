@@ -1,21 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+// const multer = require('multer');
+// const path = require('path');
+// const fs = require('fs');
 const Book = require("../models/Book");
 const Author = require("../models/Author");
 // const { fileLoader } = require("ejs");
 
+const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
 
-const uploadPath= path.join('public', Book.coverImageBasePath);
-const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif']
-const upload = multer({
-  dest: uploadPath,
-  fileFilter: (req, file, callback)=>{
-    callback(null, imageMimeTypes.includes(file.mimetype) );
-  }
-});
+
+// const uploadPath= path.join('public', Book.coverImageBasePath);
+// 
+// we are no longer going to use multer
+// const upload = multer({
+//   dest: uploadPath,
+//   fileFilter: (req, file, callback)=>{
+//     callback(null, imageMimeTypes.includes(file.mimetype) );
+//   }
+// });
 
 
 
@@ -53,9 +56,11 @@ router.get("/new", async (req, res, next) => {
 });
 
 // CREATE BOOK ROUTE
-router.post("/", upload.single('cover'), async (req, res, next) => {
-  const fileName= req.file !=null ? req.file.filename : null;
-  const {title, author, publishDate, pageCount, description} = req.body;
+// router.post("/", upload.single('cover'), callback) // by using multer
+
+router.post("/",  async (req, res, next) => {
+  // const fileName= req.file !=null ? req.file.filename : null;
+  const {title, author, publishDate, pageCount,cover,  description} = req.body;
   console.log("All the input value are: ", title, author, publishDate, pageCount, description);
   
   const book = new Book({
@@ -63,9 +68,14 @@ router.post("/", upload.single('cover'), async (req, res, next) => {
     author,
     publishDate: new Date(publishDate),
     pageCount,
-    coverImageName: fileName,
+    // coverImageName: fileName,
     description,
   });
+
+  saveCover(book, cover);
+
+
+
   try {
     const newBook = await book.save(); 
     console.log(newBook);
@@ -74,20 +84,20 @@ router.post("/", upload.single('cover'), async (req, res, next) => {
     res.redirect('/books')
   } catch {
     // IF ALL DATA DOESN'T SAVE SUCCESSFULLY AND GIVE US AN ERROR THAT WE ARE GOING TO SAVE THIS BOOK COVER WILL BE REMOVE 
-    if(book.coverImageName != null){
-      removeBookCover(book.coverImageName);
-    }
+    // if(book.coverImageName != null){
+    //   removeBookCover(book.coverImageName);
+    // }
     renderNewPage(res, book, true);
     // console.log("error ");
     // res.redirect('books')
   }
 });
 
-function removeBookCover(fileName){
-  fs.unlink(path.join(uploadPath, fileName), (err)=>{
-    if(err) console.error(err);
-  });
-}
+// function removeBookCover(fileName){
+//   fs.unlink(path.join(uploadPath, fileName), (err)=>{
+//     if(err) console.error(err);
+//   });
+// }
 
 
 
@@ -105,6 +115,16 @@ async function renderNewPage(res, book, hasError=false){
     res.render('books/new', params);
   } catch  {
     res.redirect('/books')
+  }
+}
+
+function saveCover(book, coverEncoded){
+  if(coverEncoded == null) return;
+  const cover = JSON.parse(coverEncoded);
+  if(cover != null && imageMimeTypes.includes(cover.type)){
+    // https://nodejs.org/api/buffer.html
+    book.coverImage = new Buffer.from(cover.data, 'base64');
+    book.coverImageType = cover.type;
   }
 }
 

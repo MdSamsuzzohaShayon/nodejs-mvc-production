@@ -28,3 +28,14 @@
   ![](/screenshots/5.png)
 
 *Now open the app*
+
+
+### File Management
+
+ - There are few ways to upload file. 
+ - In heroku file system when we upload our files and restart heroku server files will delete automitacally
+ - **Best Solution** is to upload this files to a seperate file server such as Amazon s3 or any other file storage system (All are paid)
+ - Another easy way is to store file in database that is not ideal but it's free to play around with
+
+ - **[Filepond](https://pqina.nl/filepond/)** A JavaScript library that can upload anything you throw at it, optimizes images for faster uploads, and offers a great, accessible, silky smooth user experience.
+ [Github](https://github.com/pqina/filepond)
