@@ -26,7 +26,9 @@
 <% if(books){ %>
 <div class="ui small stackable images">
     <% books.forEach(book=>{ %>
+    <a href="/books/<%= book.id %>">
         <img src="<%= book.coverImagePath %>" alt="Image" class="ui image">
+    </a>
     <% }) %>
 </div>
 <% } %>
